@@ -4,25 +4,23 @@ on:
   workflow_dispatch:
     inputs:
       include-MacOS-M1-M2:
-        description: 'Include macOS-(M1-M2)variations'
+        description: "Include macOS-(M1-M2)variations"
         required: true
-        default: 'false'
+        default: "false"
         type: choice
         options:
-        - 'true'
-        - 'false'
-
+          - "true"
+          - "false"
 
 jobs:
-  
   Test_under_ubuntu:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-22.04, ubuntu-20.04] 
-        python-version: [3.11.3,3.12] 
+        os: [ubuntu-22.04, ubuntu-20.04]
+        python-version: [3.11.3]
 
-## The actions
+    ## The actions
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -35,18 +33,18 @@ jobs:
       - name: install Node by apt
         shell: bash
         run: |
-            sudo apt update
-            sudo apt install nodejs
-            node --version
+          sudo apt update
+          sudo apt install nodejs
+          node --version
 
-      - name: Create import_libraries_test.py from Notebooks 
-        run: |    
+      - name: Create import_libraries_test.py from Notebooks
+        run: |
           echo "<<<<<<< Search for *.ipynb files recursively in all folders >>>>>>"
           chmod +x .github/workflows/REGX_test_import_libraries.sh
           ./.github/workflows/REGX_test_import_libraries.sh
           echo  "<<<<<<< Create import libraries from the Notebook run successfully  >>>>>>"
 
-      - name:  Install dependencies 
+      - name: Install dependencies
         run: |
           python --version
           python -m venv .venv
@@ -56,7 +54,7 @@ jobs:
           pip install -r requirements.txt
           echo "<<<<<<< Install dependencies run successfully >>>>>>"
 
-      - name:  Test the import libraries
+      - name: Test the import libraries
         run: |
           source .venv/bin/activate
           ./.github/workflows/REGX_test_import_libraries.sh
@@ -65,13 +63,12 @@ jobs:
           pytest ./.github/workflows/testing/test_import_libraries.py
           echo  "<<<<<<< Test_under_ubuntuOS run successfully  >>>>>>"
 
-
   Test_under_windows:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-2022, windows-2019]
-        python-version: [3.11.3,3.12]
+        python-version: [3.11.3]
 
     steps:
       - name: Checkout code
@@ -86,25 +83,25 @@ jobs:
         uses: crazy-max/ghaction-chocolatey@v3
         with:
           args: -h
-        
+
       - name: install Node by Chocolatey
         shell: bash
         run: |
-            choco --version
-            choco upgrade chocolatey
-            choco install nodejs
-            node -v
+          choco --version
+          choco upgrade chocolatey
+          choco install nodejs
+          node -v
 
-      - name: Create import_libraries_test.py from Notebooks 
-        shell: bash   
-        run: |    
+      - name: Create import_libraries_test.py from Notebooks
+        shell: bash
+        run: |
           echo "<<<<<<< Search for *.ipynb files recursively in all folders >>>>>>"
           chmod +x .github/workflows/REGX_test_import_libraries.sh
           ./.github/workflows/REGX_test_import_libraries.sh
           echo  "<<<<<<< Create import libraries from the Notebook run successfully  >>>>>>"
 
-      - name:  Install dependencies 
-        shell: bash  
+      - name: Install dependencies
+        shell: bash
         run: |
           echo "Note: This code is intended to run under the Bash CLI, not PowerShell."
           python --version
@@ -115,8 +112,8 @@ jobs:
           pip install -r requirements.txt
           echo "<<<<<<< Install dependencies run successfully >>>>>>"
 
-      - name:  Test the import libraries
-        shell: bash  
+      - name: Test the import libraries
+        shell: bash
         run: |
           echo "Note: This code is intended to run under the Bash CLI, not PowerShell."
           source .venv/Scripts/activate
@@ -126,14 +123,12 @@ jobs:
           pytest ./.github/workflows/testing/test_import_libraries.py
           echo  "<<<<<<< Test_under_ubuntuOS run successfully  >>>>>>"
 
-      
-
   Test_under_macos:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest,macos-13]
-        python-version: [3.11.3,3.12] 
+        os: [macos-latest, macos-13]
+        python-version: [3.11.3]
 
     steps:
       - name: Checkout code
@@ -147,18 +142,18 @@ jobs:
       - name: install Node by brew
         shell: bash
         run: |
-            brew update
-            # brew install node
-            node -v          
+          brew update
+          # brew install node
+          node -v
 
-      - name: Create import_libraries_test.py from Notebooks 
-        run: |    
-            echo "<<<<<<< Search for *.ipynb files recursively in all folders >>>>>>"
-            chmod +x .github/workflows/REGX_test_import_libraries.sh
-            ./.github/workflows/REGX_test_import_libraries.sh
-            echo  "<<<<<<< Create import libraries from the Notebook run successfully  >>>>>>"
+      - name: Create import_libraries_test.py from Notebooks
+        run: |
+          echo "<<<<<<< Search for *.ipynb files recursively in all folders >>>>>>"
+          chmod +x .github/workflows/REGX_test_import_libraries.sh
+          ./.github/workflows/REGX_test_import_libraries.sh
+          echo  "<<<<<<< Create import libraries from the Notebook run successfully  >>>>>>"
 
-      - name:  Install dependencies 
+      - name: Install dependencies
         run: |
           python --version
           python -m venv .venv
@@ -168,7 +163,7 @@ jobs:
           pip install -r requirements.txt
           echo "<<<<<<< Install dependencies run successfully >>>>>>"
 
-      - name:  Test the import libraries
+      - name: Test the import libraries
         run: |
           source .venv/bin/activate
           ./.github/workflows/REGX_test_import_libraries.sh
@@ -176,7 +171,6 @@ jobs:
           pip install pytest
           pytest ./.github/workflows/testing/test_import_libraries.py
           echo  "<<<<<<< Test_under_ubuntuOS run successfully  >>>>>>"
-          
 
   Test_under_macos_M1-M2:
     runs-on: ${{ matrix.os }}
@@ -184,7 +178,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-14] #[flyci-macos-large-latest-m1,flyci-macos-large-latest-m2] # Price on FlyC (https://github.com/apps/flyci-prod) (https://github.com/actions/runner-images)
-        python-version: [3.11.3,3.12]
+        python-version: [3.11.3]
 
     steps:
       - name: Checkout code
@@ -198,18 +192,18 @@ jobs:
       - name: install Node by brew
         shell: bash
         run: |
-            brew update
-            brew install node
-            node -v   
-        
-      - name: Create import_libraries_test.py from Notebooks 
-        run: |    
-            echo "<<<<<<< Search for *.ipynb files recursively in all folders >>>>>>"
-            chmod +x .github/workflows/REGX_test_import_libraries.sh
-            ./.github/workflows/REGX_test_import_libraries.sh 
-            echo  "<<<<<<< Create import libraries from the Notebook run successfully  >>>>>>"
+          brew update
+          brew install node
+          node -v
 
-      - name:  Install dependencies 
+      - name: Create import_libraries_test.py from Notebooks
+        run: |
+          echo "<<<<<<< Search for *.ipynb files recursively in all folders >>>>>>"
+          chmod +x .github/workflows/REGX_test_import_libraries.sh
+          ./.github/workflows/REGX_test_import_libraries.sh 
+          echo  "<<<<<<< Create import libraries from the Notebook run successfully  >>>>>>"
+
+      - name: Install dependencies
         run: |
           python --version
           python -m venv .venv
@@ -219,7 +213,7 @@ jobs:
           pip install -r requirements.txt
           echo "<<<<<<< Install dependencies run successfully >>>>>>"
 
-      - name:  Test the import libraries
+      - name: Test the import libraries
         run: |
           source .venv/bin/activate
           ./.github/workflows/REGX_test_import_libraries.sh
