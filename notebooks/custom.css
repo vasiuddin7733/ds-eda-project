@@ -1,0 +1,12 @@
+/* custom.css */
+h1 {
+    color: crimson !important;
+    font-size: 36px !important;
+}
+h2 {
+    color: darkblue !important;
+    font-style: italic !important;
+}
+h3 {
+    color: seagreen !important;
+}
